@@ -36,7 +36,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     s=copy;
   }
-
   public Item dequeue(){
     if(N==0){
       throw new NoSuchElementException("randomized queue is empty");
@@ -54,19 +53,27 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     return temp;
   }
-
-
   public Item sample(){
     if(N==0){
       throw new NoSuchElementException("randomized queue is empty");
     }
     return s[StdRandom.uniform(0,N)];
   }
+
   public Iterator<Item> iterator(){
-    return new ReverseArrayIterator();
+    return new RandomizedArrayIterator();
   }
-  private class ReverseArrayIterator implements Iterator<Item>{
+
+  private class RandomizedArrayIterator implements Iterator<Item>{
     private int i = N;
+    private int[] random = new int[N];
+
+    public RandomizedArrayIterator(){
+      for(int j=0; j<N; j++){
+        random[j]=j;
+      }
+      StdRandom.shuffle(random);
+    }
 
     public boolean hasNext(){
       return i>0;
@@ -78,7 +85,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
       if(hasNext() == false){
         throw new NoSuchElementException("No such element");
       }
-      return s[--i];
+      return s[random[--i]];
     }
   }
 
